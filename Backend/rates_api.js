@@ -4,18 +4,20 @@
 
 const fetch = require('node-fetch');
 
+
 //Fetching the rates json
 async function getRates(period) {
 
-    try{
+    try {
         const BASE_URL = `https://api.exchangeratesapi.io/${period}`;
         const response = await fetch(BASE_URL);
         const rates = await response.json();
         return rates;
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        console.log('ena dio tria piga stin kiria');
+        next(error)
         return error;
-    }  
+    }
 }
 
 module.exports = getRates;

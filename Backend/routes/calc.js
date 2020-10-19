@@ -6,13 +6,16 @@ const getRates = require('../rates_api')
 /**
  * handling the get request
  */
-router.get('/', async(req, res) =>{
+router.get('/', async (req, res, nex) => {
     // getting the rates from the API
-    let rates = await getRates('latest');
-    
-    var parsedBody = JSON.parse(JSON.stringify(rates));
-    res.send( parsedBody );
- 
+    try {
+        let rates = await getRates('latest');
+
+        var parsedBody = JSON.parse(JSON.stringify(rates));
+        res.send(parsedBody);
+    } catch (error) {
+        res.status(500).send('iNternal server error')
+    }
 });
 
 module.exports = router;
