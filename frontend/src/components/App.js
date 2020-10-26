@@ -23,12 +23,23 @@ function App() {
     /**
     * axios - get request to our backend
     */
-    axios.get("/api/calculator").then(response => {
-      setOption([response.data.base, ...Object.keys(response.data.rates)]);
-      setRate([1, ...Object.values(response.data.rates)]);
-      setToRate(1);
+    axios.get("/api/calculator")
+      .then(response => {
+        setOption([response.data.base, ...Object.keys(response.data.rates)]);
+        setRate([1, ...Object.values(response.data.rates)]);
+        setToRate(1);
 
-    });
+      })
+      .catch(error => {
+
+        if (error.response) {
+          console.log("Problem With Response ", error.response.status);
+        } else if (error.request) {
+          console.log("Problem With Request ");
+        } else {
+          console.log("we have an error " + error);
+        }
+      });
 
   }, []);
 

@@ -14,7 +14,6 @@ async function getRates(period) {
         const rates = await response.json();
         return rates;
     } catch (error) {
-        console.log('ena dio tria piga stin kiria');
         next(error)
         return error;
     }

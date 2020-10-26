@@ -14,7 +14,7 @@ router.get('/', async (req, res, nex) => {
         var parsedBody = JSON.parse(JSON.stringify(rates));
         res.send(parsedBody);
     } catch (error) {
-        res.status(500).send('iNternal server error')
+        res.status(500).send('internal server error')
     }
 });
 
