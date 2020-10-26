@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import ConvertRow from "./components/convertRow";
+import ConvertRow from "./convertRow";
 import axios from "axios";
+import Buttons from './Button'
 
 let flag;
 function App() {
-  
+  console.log('I WAS LOADED ');
   /**
    * React Hook - For all the diferent states
    */
-  const [currencyOption, setOption] = useState([]);       //state with the currency names
+  const [currencyOptions, setOption] = useState([]);       //state with the currency names
   const [currencyRate, setRate] = useState([]);           //state with the currency rates
   const [fromCurrency, setFromCurrency] = useState('EUR');//cuurency from first row
   const [toCurrency, setToCurrency] = useState('EUR');    //currency from second row
@@ -22,13 +23,14 @@ function App() {
     /**
     * axios - get request to our backend
     */
-    axios.get("/api/calculator" ).then(response => {  
+    axios.get("/api/calculator").then(response => {
       setOption([response.data.base, ...Object.keys(response.data.rates)]);
       setRate([1, ...Object.values(response.data.rates)]);
       setToRate(1);
+
     });
-    
-  },[]);
+
+  }, []);
 
   /**
    * React Hook - The code inside runs when the
@@ -41,8 +43,8 @@ function App() {
     } else {
       convert(fromRate, !flag);
     }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[fromCurrency, toCurrency]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromCurrency, toCurrency]);
 
   /**
    * Function that handles any change the user
@@ -50,12 +52,12 @@ function App() {
    * @param {the number in the text} value 
    * @param {which row} isTopRow 
    */
-  function handleChange (value, isTopRow) {
-    if(isTopRow){ 
+  function handleChange(value, isTopRow) {
+    if (isTopRow) {
       convert(value, isTopRow);
       setFromRate(value);
     }
-    else{ 
+    else {
       convert(value, isTopRow);
       setToRate(value);
     }
@@ -68,14 +70,14 @@ function App() {
    */
   function setCurrency(value, isTopRow) {
     flag = isTopRow;
-    if(isTopRow){  
-      setFromCurrency(value); 
+    if (isTopRow) {
+      setFromCurrency(value);
     }
-    else{ 
+    else {
       setToCurrency(value);
     }
   }
-  
+
   /**
    * Function that does the conversion
    * @param {the number in the text} value 
@@ -86,42 +88,47 @@ function App() {
      * to, from are the rates of each cuurency. 
      * The program 
      */
-    let from = currencyRate[currencyOption.indexOf(fromCurrency)];//ta rates perno
-    let to = currencyRate[currencyOption.indexOf(toCurrency)];
+    let from = currencyRate[currencyOptions.indexOf(fromCurrency)];//ta rates perno
+    let to = currencyRate[currencyOptions.indexOf(toCurrency)];
     let result;
     if (isTopRow) {
-      result = (to/from)*value;
+      result = (to / from) * value;
       setToRate(result);
     } else {
-      result = (to*from)*value;
+      result = (to * from) * value;
       setFromRate(result);
     }
   }
 
+  function myFunction() {
+    // make button work
+    // the button : <button onClick={() => myFunction()}>Click me</button>
+  }
   return (
-    <div className="App">
-      <header className="App-header">
+
+    <div className="App-header">
       <h1>Currency Converter</h1>
-    
-      <ConvertRow  
-        currencyOption={currencyOption}
-        onChange={  event => setCurrency(event.target.value, true)}
+
+      <ConvertRow
+        option={fromCurrency}
+        currencyOptions={currencyOptions}
+        onChange={event => setCurrency(event.target.value, true)}
         onChangeNumber={event => handleChange(event.target.value, true)}
         number={fromRate}
       />
-      
+
       <h2>↓</h2>
-      
-      <ConvertRow  
-        currencyOption={currencyOption}
-        
+
+      <ConvertRow
+        option={toCurrency}
+        currencyOptions={currencyOptions}
         onChange={event => setCurrency(event.target.value, false)}
         onChangeNumber={event => handleChange(event.target.value, false)}
         number={toRate}
       />
-    
-      </header>
+
     </div>
+
   );
 }
 export default App;
